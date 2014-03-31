@@ -29,7 +29,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.sample</groupId>
-			<artifactId>SampleModelLibrary</artifactId>
+			<artifactId>sample_model_library</artifactId>
 			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 		<!-- Mandatory Jars for enabling hibernate logging -->
