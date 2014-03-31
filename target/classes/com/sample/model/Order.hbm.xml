@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<!-- This mapping file highlights the usage of the following: 1. One-To-Many 
+	Association between Order -> LineItem 2. Highlighting the importance of cascade 
+	option. -->
+<hibernate-mapping schema="test">
+
+	<class name="com.sample.model.Order" table="ORDER_INVOICE"
+		select-before-update="false">
+		<id name="orderId" column="ID">
+			<generator class="native"></generator>
+		</id>
+		<property name="orderDate" column="ORDER_DATE" not-null="false" />
+		<!-- OrderStatus column is moved to CustomOrderEntity as part of single 
+			model multiple mapping file example -->
+		<!-- 
+		<property name="orderStatus" column="ORDER_STATUS">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">com.sample.model.OrderStatusEnum</param>
+				<param name="type">12</param>
+			</type>
+		</property>
+		-->
+
+		<!-- cascade entry is important. this ensures that when we are adding or 
+			removing parent the child is processed accordingly. Otherwise we would have 
+			errors similar to "object references an unsaved transient instance - save 
+			the transient instance before flushing". -->
+		<set name="lineItems" table="LINE_ITEM" lazy="true" cascade="save-update,delete">
+			<key column="LINE_ORDER_ID" not-null="true" />
+			<one-to-many class="com.sample.model.LineItem" />
+		</set>
+
+		<!-- notice cascade = none. Deleting an order should not delete customer -->
+		<many-to-one name="customer" class="com.sample.model.Customer"
+			column="CUSTOMER_ID" cascade="none" />
+
+	</class>
+</hibernate-mapping>

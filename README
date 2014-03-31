@@ -1,0 +1,16 @@
+Inheritance Mapping Techniques
+==============================
+
+1. Table per concrete class 
+	1.1 With Implicit Polymorphism, in this approach, create individual hbm files one per concrete class that contains the parent properties also.
+	1.2 Using union-subclass,  in this approach, create one hbm file representing the parent properties, and <union-subclass> representing children properties.
+
+2. Table per class hierarchy, one table for the complete class hierarchy.
+
+	2.1 <subclass> using ID
+	2.1 <subclass> using Discriminator
+
+3. Table per sub class 
+	3.1 using <joined-subclass> 
+	3.2 using <subclass> with a <join>.
+

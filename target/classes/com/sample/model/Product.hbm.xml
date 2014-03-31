@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping schema="test" package="com.sample.model">
+	<class name="Product" table="PRODUCT">
+		<id name="productId" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="productName" type="string" column="NAME"
+			not-null="true" />
+		<bag name="storeAvailability" table="PRODUCT_STORE" inverse="false"
+			lazy="true" cascade="all">
+			<key column="PRODUCT_ID" />
+			<many-to-many column="STORE_ID" class="com.sample.model.Store" />
+		</bag>
+	</class>
+</hibernate-mapping>

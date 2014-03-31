@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping schema="test">
+
+	<class name="com.sample.model.Address" table="ADDRESS">
+		<id name="id" column="ID">
+			<generator class="native"/>
+		</id>
+		<property name="streetName" column="STREET_NAME"
+			type="org.hibernate.type.StringType" />
+		<property name="zipCode" column="ZIP" not-null="true" />
+		<property name="city" column="CITY" />
+		<property name="countryCode" column="COUNTRY_CODE"></property>
+	</class>
+</hibernate-mapping>

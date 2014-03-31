@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<!-- This mapping file highlights the usage entity-name, multiple mappings 
+	for same model -->
+<hibernate-mapping schema="test">
+
+	<class name="com.sample.model.Order" table="ORDER_INVOICE"
+		entity-name="CustomOrderEntity">
+		<id name="orderId" column="ID">
+			<generator class="native"></generator>
+		</id>
+
+		<property name="orderStatus" column="ORDER_STATUS">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">com.sample.model.OrderStatusEnum</param>
+				<param name="type">12</param>
+			</type>
+		</property>
+
+		<set name="lineItems" table="LINE_ITEM" lazy="true" cascade="save-update,delete">
+			<key column="LINE_ORDER_ID" not-null="true" />
+			<one-to-many entity-name="CustomLineItemEntity" />
+		</set>
+
+		<many-to-one name="customer" class="com.sample.model.Customer"
+			column="CUSTOMER_ID" cascade="none" />
+
+	</class>
+</hibernate-mapping>

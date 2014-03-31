@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<!-- Hibernate Mapping options are optional and shown here with their default 
+	values. -->
+<hibernate-mapping schema="test" default-access="property"
+	default-lazy="true" default-cascade="none" auto-import="true">
+	<class name="com.sample.model.Store" table="STORE">
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="name" type="org.hibernate.type.StringType"
+			column="NAME" not-null="true" />
+		<!-- This introduces one way association from Store to Address. The primary 
+			key column is same for both the class participating in the association. -->
+		<one-to-one name="address" class="com.sample.model.Address"
+			cascade="save-update, delete"></one-to-one>
+
+		<bag name="productInventory" table="PRODUCT_STORE" inverse="true"
+			lazy="true">
+			<key column="STORE_ID" />
+			<many-to-many column="PRODUCT_ID" class="com.sample.model.Product" />
+		</bag>
+
+		<set name="employees" table="EMPLOYEE" cascade="save-update,delete">
+			<key column="STORE_ID" />
+			<one-to-many class="com.sample.model.Employee" />
+		</set>
+	</class>
+</hibernate-mapping>

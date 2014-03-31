@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<!-- TABLE PER SUBLCASS WITH DISCRIMINATOR COLUMN, USAGE OF EUNM TYPE -->
+<hibernate-mapping schema="test">
+	<!-- Table per subclass, using Discriminator Column defined in super class -->
+	<subclass name="com.sample.model.Employee" extends="com.sample.model.Person"
+		discriminator-value="EMPLOYEE">
+		<!-- fetch="select" tells hibernate not to fetch Employee subclass data 
+			using an outer join when querying Person -->
+		<join table="EMPLOYEE" fetch="select">
+			<key column="EMPLOYEE_ID" />
+			<property name="role" column="ROLE">
+				<type name="org.hibernate.type.EnumType">
+					<param name="enumClass">com.sample.model.EmployeeTypeEnum</param>
+					<!-- type determines what value gets stored in DB column. In this case 
+						12 means Enum String -->
+					<param name="type">12</param>
+				</type>
+			</property>
+			<!-- this was intended to be a 1:1 association, but join tag does not 
+				support 1:1 association -->
+			<many-to-one name="address" class="com.sample.model.Address"
+				cascade="save-update,delete" column="ADDRESS_ID" />
+		</join>
+	</subclass>
+</hibernate-mapping>
+
+
+<!-- 1. Table per subclass, using a Discriminator column 2. Usage of Enum 
+	data type 3. Join tag is not supporting 1:1 association. [TBD why?] -->

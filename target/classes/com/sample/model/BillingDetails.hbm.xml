@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<!-- TABLE PER CONCRETE CLASS WITH UNIONS -->
+<hibernate-mapping schema="test" package="com.sample.model">
+
+	<!-- defining abstract=true, tells hibernate not to create separate table 
+		for Billing details -->
+	<class name="BillingDetails" abstract="true">
+
+		<id name="billingId" column="ID">
+		</id>
+
+		<!-- Constrained explained: This impacts the lazy loading behavior. As 
+			we know hibernate has custom wrappers for java collections. In case of lazy=true, 
+			they simply load the proxy of these collections and when any one accesses 
+			these entries then only the corresponding collection is retrieved by issuing 
+			another SELECT query. Now this works since there are predefined wrappers 
+			for collections, and collections are only way to define 1:M, M:M and M:1 
+			association in POJO. For 1:1 association things become a bit tricky, in this 
+			case the other end of the association is a user defined class. For hibernate 
+			to provide the lazy behavior it'd have to create a proxy object and set in 
+			entity for the other end user-defined class. But before setting a proxy it 
+			needs to ensure that the other end is not null. The only way to ensure this 
+			is to make a SELECT query, which then defeats the lazy loading concept. Hence 
+			constrained=true tells hibernate that other end has to be not null for the 
+			entity to exist and then hibernate can safely create a proxy and provide 
+			lazy loading behavior. -->
+
+
+		<one-to-one name="user" class="com.sample.model.Person"
+			constrained="true" />
+
+		<union-subclass name="CreditCard" table="CREDIT_CARD">
+			<property name="creditCardNumber" column="CC_NUMBER"
+				type="org.hibernate.type.LongType" />
+			<one-to-one name="billingAddress" class="com.sample.model.Address"
+				cascade="save-update,delete" />
+		</union-subclass>
+		<union-subclass name="BankAccount" table="BANK_ACCOUNT">
+			<property name="accountNumber" column="AC_NUMBER" />
+			<property name="routingNumber" column="ROUTING_NUMBER" />
+		</union-subclass>
+	</class>
+
+</hibernate-mapping>

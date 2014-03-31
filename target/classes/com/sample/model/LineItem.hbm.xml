@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping schema="test" package="com.sample.model">
+
+	<!-- Marked Lazy as True. Default is false. class name can be fully qualified. 
+		If not then package define in hibernate-mapping tag is used. -->
+
+	<class name="LineItem" table="LINE_ITEM" lazy="true">
+		<id name="id" column="ID">
+			<generator class="native"></generator>
+		</id>
+		<property name="productName" type="string" column="DESCRIPTION" />
+		<property name="quantity" type="integer" column="QUANTITY" />
+		<property name="unitPrice" type="double" column="UNIT_PRICE" />
+		<!-- Notice I have not defined lineOrderId column, this is defined in Order.hbm.xml 
+			as part of one-to-many association. defining here would cause an hibernate 
+			exception. "Repeated column in mapping for entity: com.sample.model.LineItem 
+			column: LINE_ORDER_ID (should be mapped with insert="false" update="false")" -->
+	</class>
+</hibernate-mapping>
