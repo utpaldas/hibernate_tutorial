@@ -3,9 +3,11 @@ package com.sample.hbm.test;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
@@ -75,6 +77,51 @@ public class CriteriaQueryTest {
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			logger.error(e.getLocalizedMessage());
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+			customer.deleteRecord();
+		}
+	}
+
+	/**
+	 * Sample query where the column from a associated table is part of the
+	 * Restriction.
+	 */
+	@Test
+	public void testCriteriaQueryWithJoinColumn() {
+		customer.insertRecord();
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.add(Restrictions.eqOrIsNull("customer.id", new Long(1)));
+			List<Order> orders = criteria.list();
+			session.getTransaction().commit();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+			customer.deleteRecord();
+		}
+		
+	}
+	
+	@Test
+	public void testCriteriaQueryCountonEntity() {
+		customer.insertRecord();
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.setProjection(Projections.rowCount());
+			long rowCnt = (Long)criteria.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			if (session != null && session.isOpen()) {
 				session.close();
