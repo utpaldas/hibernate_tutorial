@@ -96,7 +96,7 @@ public class CriteriaQueryTest {
 		try {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Order.class);
-			criteria.add(Restrictions.eqOrIsNull("customer.id", new Long(1)));
+			criteria.add(Restrictions.eq("customer.id", new Long(1)));
 			List<Order> orders = criteria.list();
 			session.getTransaction().commit();
 		} catch (HibernateException e) {
@@ -113,10 +113,12 @@ public class CriteriaQueryTest {
 	@Test
 	public void testCriteriaQueryCountonEntity() {
 		customer.insertRecord();
+		Customer cust = customer.getCustomerById();
 		Session session = sessionFactory.getCurrentSession();
 		try {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Order.class);
+			criteria.add(Restrictions.eq("customer", cust));
 			criteria.setProjection(Projections.rowCount());
 			long rowCnt = (Long)criteria.uniqueResult();
 			session.getTransaction().commit();
