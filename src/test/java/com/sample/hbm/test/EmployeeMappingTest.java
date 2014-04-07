@@ -1,14 +1,18 @@
 package com.sample.hbm.test;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 
 import com.sample.hbm.util.HibernateUtil;
 import com.sample.model.Address;
+import com.sample.model.AddressTypeEnum;
 import com.sample.model.Employee;
 import com.sample.model.EmployeeTypeEnum;
 
@@ -38,6 +42,18 @@ public class EmployeeMappingTest implements CRUD {
 			addr.setCountryCode("USA");
 			addr.setStreetName("Town Center");
 			addr.setZipCode("48083");
+			addr.setType(AddressTypeEnum.WORK);
+			employee.setAddress(addr);
+			session.save(employee);
+			session.getTransaction().commit();
+
+			session = sessionFactory.getCurrentSession();
+			session.beginTransaction();
+			employee = new Employee();
+			employee.setFirstName("Preeti");
+			employee.setLastName("Das");
+			employee.setRole(EmployeeTypeEnum.INTERN);
+			addr = (Address) session.get(Address.class, new Long(1));
 			employee.setAddress(addr);
 			session.save(employee);
 			session.getTransaction().commit();
@@ -51,9 +67,29 @@ public class EmployeeMappingTest implements CRUD {
 
 	}
 
+	/**
+	 * Get All employees with same work address.
+	 */
+	@Test
 	public void getRecord() {
-		// TODO Auto-generated method stub
-
+		insertRecord();
+		Session session = null;
+		try {
+			session = sessionFactory.getCurrentSession();
+			session.beginTransaction();
+			Address addr = (Address) session.get(Address.class, new Long(1));
+			Criteria criteria = session.createCriteria(Employee.class);
+			criteria.add(Restrictions.eq("address", addr));
+			criteria.setProjection(Projections.rowCount());
+			long rowCnt = (Long) criteria.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
 	}
 
 	@Test
@@ -66,7 +102,7 @@ public class EmployeeMappingTest implements CRUD {
 			Employee customEmp = (Employee) session.get("CustomEmployeeEntity",
 					new Long(1));
 			customEmp.setDept("CSMTG");
-			session.update("CustomEmployeeEntity", customEmp);
+			session.save("CustomEmployeeEntity", customEmp);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -82,7 +118,8 @@ public class EmployeeMappingTest implements CRUD {
 		Session session = null;
 		try {
 			session = sessionFactory.getCurrentSession();
-			Employee employee = (Employee) session.get(Employee.class, new Long(1));
+			Employee employee = (Employee) session.get(Employee.class,
+					new Long(1));
 			session.delete(employee);
 			session.getTransaction().commit();
 		} catch (HibernateException e) {

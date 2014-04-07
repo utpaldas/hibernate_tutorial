@@ -23,7 +23,7 @@
 			<!-- this was intended to be a 1:1 association, but join tag does not 
 				support 1:1 association -->
 			<many-to-one name="address" class="com.sample.model.Address"
-				cascade="save-update,delete" column="ADDRESS_ID" />
+				cascade="save-update" column="ADDRESS_ID" />
 		</join>
 	</subclass>
 </hibernate-mapping>

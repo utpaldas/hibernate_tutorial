@@ -5,9 +5,11 @@
 
 <!-- TABLE PER SUBCLASS -->
 <hibernate-mapping schema="test" package="com.sample.model">
-	<!--  Table per subclass, subclass has primary key association to super class -->
-	<joined-subclass name="Customer" extends="com.sample.model.Person" table="CUSTOMER">
-		<key column="ID" /> <!--  key column from person -->
-		<one-to-one name="address" class="com.sample.model.Address" cascade="save-update,delete" />
+	<!-- Table per subclass, subclass has primary key association to super class -->
+	<joined-subclass name="Customer" extends="com.sample.model.Person"
+		table="CUSTOMER">
+		<key column="ID" /> <!-- key column from person -->
+		<many-to-one name="address" class="com.sample.model.Address"
+			column="ADDRESS_ID" cascade="none"></many-to-one>
 	</joined-subclass>
 </hibernate-mapping>

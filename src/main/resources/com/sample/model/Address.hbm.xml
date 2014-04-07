@@ -7,8 +7,14 @@
 
 	<class name="com.sample.model.Address" table="ADDRESS">
 		<id name="id" column="ID">
-			<generator class="native"/>
+			<generator class="native" />
 		</id>
+		<property name="type" column="ADDRESS_TYPE">
+			<type name="org.hibernate.type.EnumType">
+				<param name="enumClass">com.sample.model.AddressTypeEnum</param>
+				<param name="type">12</param>
+			</type>
+		</property>
 		<property name="streetName" column="STREET_NAME"
 			type="org.hibernate.type.StringType" />
 		<property name="zipCode" column="ZIP" not-null="true" />

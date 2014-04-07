@@ -216,6 +216,7 @@ public class ManyToOneMappingTest implements CRUD {
 			session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			Order ord = (Order)session.get("CustomOrderEntity", new Long(1));
+
 			ord.setOrderStatus(OrderStatusEnum.IN_PROGRESS);
 			session.update("CustomOrderEntity", ord);
 			session.getTransaction().commit();

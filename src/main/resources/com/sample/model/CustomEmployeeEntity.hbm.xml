@@ -3,14 +3,28 @@
 "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 
-<!-- TABLE PER SUBLCASS WITH DISCRIMINATOR COLUMN, USAGE OF ENTITY-NAME ON SUBCLASS -->
+<!-- TABLE PER SUBLCASS WITH DISCRIMINATOR COLUMN, USAGE OF ENTITY-NAME ON 
+	SUBCLASS -->
 <hibernate-mapping schema="test">
-	<subclass name="com.sample.model.Employee" extends="com.sample.model.Person" entity-name="CustomEmployeeEntity">
-		<join table="EMPLOYEE">
+	<!-- Please note discriminator value should be same as the parent mapping, 
+		in this case employee. The reason is when we do a get, hiberante issues an 
+		inner join query with where clause type="employee" If you donot give that, 
+		then default type=entity-name and there would not be any records retrieved 
+		in get. Refer to the sample get query by running EmployeeMappingTest.updateRecord. -->
+	<subclass name="com.sample.model.Employee" extends="com.sample.model.Person"
+		discriminator-value="Employee" entity-name="CustomEmployeeEntity">
+		<join table="EMPLOYEE" fetch="select">
 			<key column="EMPLOYEE_ID" />
 			<property name="dept" column="DEPT" type="string" />
+			<!-- Note: Code Observation. While defining entity-name mapping, it should 
+				include all the many-to-one associations. Otherwise the count query would 
+				fail for queries where the where clause refers to that association. Hibernate 
+				code for some reason creates count(*) queries for each mapping and entity-name, 
+				even if we do a count on main mapping file and not on entity. Refer to EmployeeMappingTest.getRecord 
+				as sample test for this. Comment out the many-to-one association below and 
+				run that test case. It'd fail, even though we are doing count(*) on Employee.class -->
 			<many-to-one name="address" class="com.sample.model.Address"
-				cascade="save-update,delete" column="ADDRESS_ID" />
+				cascade="save-update" column="ADDRESS_ID" />
 		</join>
 	</subclass>
 </hibernate-mapping>
