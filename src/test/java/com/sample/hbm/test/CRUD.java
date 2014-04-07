@@ -4,7 +4,7 @@ public interface CRUD {
 
 	public void insertRecord();
 
-	public void queryRecordUsingHQL();
+	public void getRecord();
 
 	public void updateRecord();
 

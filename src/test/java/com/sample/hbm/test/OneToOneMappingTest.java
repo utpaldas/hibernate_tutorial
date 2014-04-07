@@ -69,7 +69,7 @@ public class OneToOneMappingTest implements CRUD {
 	 * Test the one to one join association query.
 	 */
 	@Test
-	public void queryRecordUsingHQL() {
+	public void getRecord() {
 		Session session = null;
 		try {
 			session = sessionFactory.getCurrentSession();

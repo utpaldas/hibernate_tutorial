@@ -29,9 +29,10 @@
 			include all the many-to-one associations. Otherwise the count query would 
 			fail for queries where the where clause refers to that association. Hibernate 
 			code for some reason creates count(*) queries for each mapping and entity-name, 
-			even if we do a count on main mapping file and not on entity. Refer to CriteriaQueryTest.testCriteriaQueryCountonEntity 
-			as sample test for this. Comment out the many-to-one association below and 
-			run that test case. It'd fail, even though we are doing count(*) on Order.class -->
+			even if we do a count on main mapping file and not on entity. Refer to 
+			CriteriaQueryTest.testCriteriaQueryCountonEntity as sample test for this. Comment 
+			out the many-to-one association below and run that test case. It'd fail, even though 
+			we are doing count(*) on Order.class -->
 		<many-to-one name="customer" class="com.sample.model.Customer"
 			column="CUSTOMER_ID" cascade="none" />
 

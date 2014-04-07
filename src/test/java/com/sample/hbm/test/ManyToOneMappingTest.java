@@ -19,6 +19,7 @@ import com.sample.model.Address;
 import com.sample.model.Customer;
 import com.sample.model.LineItem;
 import com.sample.model.Order;
+import com.sample.model.OrderStatusEnum;
 
 /**
  * Implementation of Many-To-One Association between Order -> Customer.
@@ -98,7 +99,7 @@ public class ManyToOneMappingTest implements CRUD {
 			session.beginTransaction();
 
 			Order ord = new Order();
-			//ord.setOrderDate(new java.util.Date(System.currentTimeMillis()));
+			ord.setOrderDate(new java.util.Date(System.currentTimeMillis()));
 
 			// Set LineItems
 			Set<LineItem> lineItems = new HashSet<LineItem>();
@@ -118,7 +119,7 @@ public class ManyToOneMappingTest implements CRUD {
 
 			ord.setCustomer(customer);
 
-			session.save("CustomOrderEntity",ord);
+			session.save("Order",ord);
 			session.getTransaction().commit();
 		} catch (Exception ex) {
 			logger.error(this.getClass().getCanonicalName() + ": insertRecord"
@@ -200,12 +201,33 @@ public class ManyToOneMappingTest implements CRUD {
 	}
 
 	@Test
-	public void queryRecordUsingHQL() {
+	public void getRecord() {
 		this.getCustomerById();
 	}
 
 	@Test
 	public void updateRecord() {
+		insertCustomerRecord();
+		insertOrderRecord1();
+		insertOrderRecord2();
+
+		Session session = null;
+		try {
+			session = sessionFactory.getCurrentSession();
+			session.beginTransaction();
+			Order ord = (Order)session.get("CustomOrderEntity", new Long(1));
+			ord.setOrderStatus(OrderStatusEnum.IN_PROGRESS);
+			session.update("CustomOrderEntity", ord);
+			session.getTransaction().commit();
+		} catch (Exception ex) {
+			logger.error(this.getClass().getCanonicalName() + ": deleteRecord"
+					+ ex.getLocalizedMessage());
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+		
 	}
 
 	@Test

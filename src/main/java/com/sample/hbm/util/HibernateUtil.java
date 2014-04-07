@@ -34,8 +34,7 @@ public class HibernateUtil {
 			config.addResource("com/sample/model/BillingDetails.hbm.xml");
 			config.addResource("com/sample/model/CustomOrderEntity.hbm.xml");
 			config.addResource("com/sample/model/CustomLineItemEntity.hbm.xml");
-
-
+			config.addResource("com/sample/model/CustomEmployeeEntity.hbm.xml");
 			// config.addClass(com.sample.model.Store.class);
 			// config.addClass(com.sample.model.Address.class);
 			sessionFactory = config.buildSessionFactory();

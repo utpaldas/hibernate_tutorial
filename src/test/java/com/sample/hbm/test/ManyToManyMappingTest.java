@@ -144,7 +144,7 @@ public class ManyToManyMappingTest implements CRUD {
 		return obj;
 	}
 
-	public void queryRecordUsingHQL() {
+	public void getRecord() {
 
 	}
 

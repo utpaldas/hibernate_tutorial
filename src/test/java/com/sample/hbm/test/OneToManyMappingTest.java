@@ -8,7 +8,6 @@ import java.util.Set;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.DetachedCriteria;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -107,7 +106,7 @@ public class OneToManyMappingTest implements CRUD {
 	}
 
 	@Test
-	public void queryRecordUsingHQL() {
+	public void getRecord() {
 		this.getOrderById();
 	}
 

@@ -131,5 +131,46 @@ public class CriteriaQueryTest {
 			customer.deleteRecord();
 		}
 	}
+	
+	@Test
+	public void testCriteriaQueryCountonEntityName() {
+		customer.insertRecord();
+		Customer cust = customer.getCustomerById();
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria("CustomOrderEntity");
+			criteria.add(Restrictions.eq("customer", cust));
+			criteria.setProjection(Projections.rowCount());
+			long rowCnt = (Long)criteria.uniqueResult();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+			customer.deleteRecord();
+		}
+	}
+	
+	@Test
+	public void testGetEntityName() {
+		customer.insertRecord();
+		Customer cust = customer.getCustomerById();
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			session.beginTransaction();
+			Order ord = (Order)session.get("CustomOrderEntity", new Long(1));
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+			customer.deleteRecord();
+		}
+	}
 
 }
