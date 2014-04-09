@@ -34,8 +34,8 @@ public class EmployeeMappingTest implements CRUD {
 			session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			Employee employee = new Employee();
-			employee.setFirstName("Utpal");
-			employee.setLastName("Das");
+			employee.setFirstName("John");
+			employee.setLastName("Doe");
 			employee.setRole(EmployeeTypeEnum.INTERN);
 			Address addr = new Address();
 			addr.setCity("Troy");
@@ -50,8 +50,8 @@ public class EmployeeMappingTest implements CRUD {
 			session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			employee = new Employee();
-			employee.setFirstName("Preeti");
-			employee.setLastName("Das");
+			employee.setFirstName("Peter");
+			employee.setLastName("Doe");
 			employee.setRole(EmployeeTypeEnum.INTERN);
 			addr = (Address) session.get(Address.class, new Long(1));
 			employee.setAddress(addr);

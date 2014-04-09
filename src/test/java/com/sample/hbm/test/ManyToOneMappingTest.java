@@ -52,11 +52,11 @@ public class ManyToOneMappingTest implements CRUD {
 			session.beginTransaction();
 			Customer customer = new Customer();
 			customer.setCustomerId(System.currentTimeMillis());
-			customer.setFirstName("Utpal");
+			customer.setFirstName("John");
 			customer.setLastName("Das");
 
 			Address addr = new Address();
-			addr.setStreetName("2366 John R Rd");
+			addr.setStreetName("1234 Heavenly Rd");
 			addr.setCity("Troy");
 			addr.setCountryCode("USA");
 			addr.setZipCode("48083");
@@ -64,11 +64,11 @@ public class ManyToOneMappingTest implements CRUD {
 
 			Customer customer1 = new Customer();
 			customer1.setCustomerId(System.currentTimeMillis());
-			customer1.setFirstName("Preeti");
-			customer1.setLastName("Borgohain");
+			customer1.setFirstName("Peter");
+			customer1.setLastName("Butler");
 
 			Address addr1 = new Address();
-			addr1.setStreetName("2366 John R Rd Apt 103");
+			addr1.setStreetName("1234 Heavenly Rd");
 			addr1.setCity("Troy");
 			addr1.setCountryCode("USA");
 			addr1.setZipCode("48083");
