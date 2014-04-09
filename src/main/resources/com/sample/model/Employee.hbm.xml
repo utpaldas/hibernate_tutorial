@@ -7,7 +7,7 @@
 <hibernate-mapping schema="test">
 	<!-- Table per subclass, using Discriminator Column defined in super class -->
 	<subclass name="com.sample.model.Employee" extends="com.sample.model.Person"
-		discriminator-value="EMPLOYEE">
+		discriminator-value="EMPLOYEE" entity-name="BaseEmployee">
 		<!-- fetch="select" tells hibernate not to fetch Employee subclass data 
 			using an outer join when querying Person -->
 		<join table="EMPLOYEE" fetch="select">

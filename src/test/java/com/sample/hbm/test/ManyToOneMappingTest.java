@@ -119,7 +119,7 @@ public class ManyToOneMappingTest implements CRUD {
 
 			ord.setCustomer(customer);
 
-			session.save("Order",ord);
+			session.save("BaseOrder", ord);
 			session.getTransaction().commit();
 		} catch (Exception ex) {
 			logger.error(this.getClass().getCanonicalName() + ": insertRecord"
@@ -215,8 +215,7 @@ public class ManyToOneMappingTest implements CRUD {
 		try {
 			session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			Order ord = (Order)session.get("CustomOrderEntity", new Long(1));
-
+			Order ord = (Order) session.get("CustomOrderEntity", new Long(1));
 			ord.setOrderStatus(OrderStatusEnum.IN_PROGRESS);
 			session.update("CustomOrderEntity", ord);
 			session.getTransaction().commit();
@@ -228,7 +227,7 @@ public class ManyToOneMappingTest implements CRUD {
 				session.close();
 			}
 		}
-		
+
 	}
 
 	@Test

@@ -9,7 +9,7 @@
 <hibernate-mapping schema="test">
 
 	<class name="com.sample.model.Order" table="ORDER_INVOICE"
-		select-before-update="false">
+		select-before-update="false" entity-name="BaseOrder">
 		<id name="orderId" column="ID">
 			<generator class="native"></generator>
 		</id>

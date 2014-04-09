@@ -44,7 +44,7 @@ public class EmployeeMappingTest implements CRUD {
 			addr.setZipCode("48083");
 			addr.setType(AddressTypeEnum.WORK);
 			employee.setAddress(addr);
-			session.save(employee);
+			session.save("BaseEmployee", employee);
 			session.getTransaction().commit();
 
 			session = sessionFactory.getCurrentSession();
@@ -55,7 +55,7 @@ public class EmployeeMappingTest implements CRUD {
 			employee.setRole(EmployeeTypeEnum.INTERN);
 			addr = (Address) session.get(Address.class, new Long(1));
 			employee.setAddress(addr);
-			session.save(employee);
+			session.save("BaseEmployee", employee);
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -78,10 +78,12 @@ public class EmployeeMappingTest implements CRUD {
 			session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
 			Address addr = (Address) session.get(Address.class, new Long(1));
-			Criteria criteria = session.createCriteria(Employee.class);
+			Criteria criteria = session.createCriteria("BaseEmployee");
 			criteria.add(Restrictions.eq("address", addr));
+			//criteria.addOrder(Order.desc("role"));
 			criteria.setProjection(Projections.rowCount());
 			long rowCnt = (Long) criteria.uniqueResult();
+			//List<Employee> empList = criteria.list();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();

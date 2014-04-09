@@ -26,7 +26,7 @@
 
 		<set name="employees" table="EMPLOYEE" cascade="save-update,delete">
 			<key column="STORE_ID" />
-			<one-to-many class="com.sample.model.Employee" />
+			<one-to-many entity-name="BaseEmployee" />
 		</set>
 	</class>
 </hibernate-mapping>
