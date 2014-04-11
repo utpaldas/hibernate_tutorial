@@ -12,7 +12,7 @@
 		then default type=entity-name and there would not be any records retrieved 
 		in get. Refer to the sample get query by running EmployeeMappingTest.updateRecord. -->
 	<subclass name="com.sample.model.Employee" extends="com.sample.model.Person"
-		discriminator-value="Employee" entity-name="CustomEmployeeEntity">
+		discriminator-value="CustomEmployee" entity-name="CustomEmployeeEntity">
 		<join table="EMPLOYEE" fetch="select">
 			<key column="EMPLOYEE_ID" />
 			<property name="dept" column="DEPT" type="string" />
