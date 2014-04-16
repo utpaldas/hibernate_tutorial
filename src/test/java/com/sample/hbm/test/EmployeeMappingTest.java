@@ -1,10 +1,11 @@
 package com.sample.hbm.test;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import com.sample.hbm.util.HibernateUtil;
 import com.sample.model.Address;
 import com.sample.model.AddressTypeEnum;
+import com.sample.model.Customer;
 import com.sample.model.Employee;
 import com.sample.model.EmployeeTypeEnum;
 
@@ -72,18 +74,14 @@ public class EmployeeMappingTest implements CRUD {
 	 */
 	@Test
 	public void getRecord() {
-		insertRecord();
+		insertCustomerRecord();
+		insertRecord();		
 		Session session = null;
 		try {
 			session = sessionFactory.getCurrentSession();
 			session.beginTransaction();
-			Address addr = (Address) session.get(Address.class, new Long(1));
-			Criteria criteria = session.createCriteria("BaseEmployee");
-			criteria.add(Restrictions.eq("address", addr));
-			//criteria.addOrder(Order.desc("role"));
-			criteria.setProjection(Projections.rowCount());
-			long rowCnt = (Long) criteria.uniqueResult();
-			//List<Employee> empList = criteria.list();
+			Employee employee = (Employee)session.get("BaseEmployee", new Long(3));
+			EmployeeTypeEnum type = employee.getRole();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -131,6 +129,50 @@ public class EmployeeMappingTest implements CRUD {
 				session.close();
 			}
 		}
+	}
+	
+	private void insertCustomerRecord() {
+		Session session = null;
+		try {
+			session = sessionFactory.getCurrentSession();
+			session.beginTransaction();
+			Customer customer = new Customer();
+			customer.setCustomerId(System.currentTimeMillis());
+			customer.setFirstName("John");
+			customer.setLastName("doe");
+
+			Address addr = new Address();
+			addr.setStreetName("1234 Heavenly Rd");
+			addr.setCity("Troy");
+			addr.setCountryCode("USA");
+			addr.setZipCode("48083");
+			customer.setAddress(addr);
+
+			Customer customer1 = new Customer();
+			customer1.setCustomerId(System.currentTimeMillis());
+			customer1.setFirstName("Peter");
+			customer1.setLastName("Butler");
+
+			Address addr1 = new Address();
+			addr1.setStreetName("1234 Heavenly Rd");
+			addr1.setCity("Troy");
+			addr1.setCountryCode("USA");
+			addr1.setZipCode("48083");
+			customer1.setAddress(addr1);
+
+			session.save(customer);
+			session.save(customer1);
+			session.getTransaction().commit();
+
+		} catch (Exception ex) {
+			logger.error(this.getClass().getCanonicalName()
+					+ ": insertCustomerRecord" + ex.getLocalizedMessage());
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+		}
+
 	}
 
 }

@@ -10,6 +10,6 @@
 		table="CUSTOMER">
 		<key column="ID" /> <!-- key column from person -->
 		<many-to-one name="address" class="com.sample.model.Address"
-			column="ADDRESS_ID" cascade="none"></many-to-one>
+			column="ADDRESS_ID" cascade="save-update"></many-to-one>
 	</joined-subclass>
 </hibernate-mapping>

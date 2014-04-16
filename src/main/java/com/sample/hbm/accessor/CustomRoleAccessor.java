@@ -2,16 +2,22 @@ package com.sample.hbm.accessor;
 
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.PropertyNotFoundException;
+import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.spi.SessionFactoryImplementor;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.property.Getter;
 import org.hibernate.property.PropertyAccessor;
 import org.hibernate.property.Setter;
 
+import com.sample.hbm.util.HibernateUtil;
+import com.sample.model.Customer;
 import com.sample.model.Employee;
 import com.sample.model.EmployeeTypeEnum;
 
@@ -41,8 +47,8 @@ public class CustomRoleAccessor implements PropertyAccessor {
 		static {
 			try {
 				Class[] cArg = new Class[1];
-				cArg[0] = Long.class;
-				method = RoleGetter.class.getMethod("getRole", cArg);
+				cArg[0] = Object.class;
+				method = RoleGetter.class.getMethod("get", cArg);
 				methodName = method.getName();
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -54,18 +60,13 @@ public class CustomRoleAccessor implements PropertyAccessor {
 		}
 
 		public Object get(Object owner) throws HibernateException {
-			if (insert) {
-				insert = false; //reset insert
-				return ((Employee) owner).getRole();
-			} else {
-				return getRole(new Long(1));
-			}
+			Employee employee = (Employee) owner;
+			return employee.getRole();
 		}
 
 		public Object getForInsert(Object owner, Map mergeMap,
 				SessionImplementor session) throws HibernateException {
 			Employee employee = (Employee) owner;
-			insert = true;
 			return employee.getRole();
 		}
 
@@ -85,10 +86,6 @@ public class CustomRoleAccessor implements PropertyAccessor {
 			return method;
 		}
 
-		public EmployeeTypeEnum getRole(Long id) {
-			return EmployeeTypeEnum.MANAGER;
-		}
-		
 	}
 
 	private static class RoleSetter implements Setter {
@@ -116,8 +113,14 @@ public class CustomRoleAccessor implements PropertyAccessor {
 		public void set(Object target, Object value,
 				SessionFactoryImplementor factory) throws HibernateException {
 			Employee employee = (Employee) target;
-			EmployeeTypeEnum val = (EmployeeTypeEnum) value;
+			EmployeeTypeEnum val = employee.getRole();//getRole(null);
 			employee.setRole(val);
+			Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+			Criteria criteria = session.createCriteria(Customer.class).add(Restrictions.eqOrIsNull("firstName", "John"));
+			List<Customer> list = criteria.list();
+			if (!list.isEmpty()){
+				employee.setRole(EmployeeTypeEnum.EMPLOYEE_CUSTOMER);
+			}
 		}
 
 		public String getMethodName() {
@@ -128,5 +131,8 @@ public class CustomRoleAccessor implements PropertyAccessor {
 			return method;
 		}
 
+		public EmployeeTypeEnum getRole(Long id) {
+			return EmployeeTypeEnum.MANAGER;
+		}
 	}
 }
