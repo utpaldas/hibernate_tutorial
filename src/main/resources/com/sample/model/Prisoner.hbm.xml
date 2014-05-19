@@ -3,12 +3,21 @@
 "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping schema="test" package="com.sample.model">
-	<class name="Person" table="PERSON" dynamic-update="true">
+	<class name="Prisoner" table="PRISONER" dynamic-update="true">
 		<id name="id" column="ID">
 			<generator class="native" />
 		</id>
-		<discriminator column="TYPE" type="string" />
+		<property name="cellNumber" type="long" column="CELL"/>
 		<property name="firstName" type="string" column="FNAME" />
 		<property name="lastName" type="string" column="LNAME" />
+		<filter name="filter1" condition="CELL > :cnumber"></filter>
+		<filter name="filter2" condition="CELL > :pnumber"></filter>
+		
 	</class>
+	<filter-def name="filter1">
+		<filter-param name="cnumber" type="long"/>
+	</filter-def>
+	<filter-def name="filter2">
+		<filter-param name="pnumber" type="long"/>
+	</filter-def>
 </hibernate-mapping>

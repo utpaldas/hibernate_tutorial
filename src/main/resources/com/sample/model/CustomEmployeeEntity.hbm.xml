@@ -12,10 +12,12 @@
 		then default type=entity-name and there would not be any records retrieved 
 		in get. Refer to the sample get query by running EmployeeMappingTest.updateRecord. -->
 	<subclass name="com.sample.model.Employee" extends="com.sample.model.Person"
-		discriminator-value="CustomEmployee" entity-name="CustomEmployeeEntity">
+		discriminator-value="Employee" entity-name="CustomEmployeeEntity">
 		<join table="EMPLOYEE" fetch="select">
 			<key column="EMPLOYEE_ID" />
 			<property name="dept" column="DEPT" type="string" />
+			<property name="managerName" column="MANAGER" type="string" />
+			
 			<!-- Note: Code Observation. While defining entity-name mapping, it should 
 				include all the many-to-one associations. Otherwise the count query would 
 				fail for queries where the where clause refers to that association. Hibernate 

@@ -9,21 +9,21 @@
 <hibernate-mapping schema="test">
 
 	<class name="com.sample.model.Order" table="ORDER_INVOICE"
-		select-before-update="false" entity-name="BaseOrder">
+		select-before-update="false">
 		<id name="orderId" column="ID">
 			<generator class="native"></generator>
 		</id>
 		<property name="orderDate" column="ORDER_DATE" not-null="false" />
 		<!-- OrderStatus column is moved to CustomOrderEntity as part of single 
 			model multiple mapping file example -->
-		<!-- 
+
 		<property name="orderStatus" column="ORDER_STATUS">
 			<type name="org.hibernate.type.EnumType">
 				<param name="enumClass">com.sample.model.OrderStatusEnum</param>
 				<param name="type">12</param>
 			</type>
 		</property>
-		-->
+
 
 		<!-- cascade entry is important. this ensures that when we are adding or 
 			removing parent the child is processed accordingly. Otherwise we would have 

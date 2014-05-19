@@ -7,9 +7,9 @@
 <hibernate-mapping schema="test" package="com.sample.model">
 	<!-- Table per subclass, subclass has primary key association to super class -->
 	<joined-subclass name="Customer" extends="com.sample.model.Person"
-		table="CUSTOMER">
+		table="CUSTOMER" dynamic-update="true">
 		<key column="ID" /> <!-- key column from person -->
 		<many-to-one name="address" class="com.sample.model.Address"
-			column="ADDRESS_ID" cascade="save-update"></many-to-one>
+			column="ADDRESS_ID" cascade="save-update" lazy="false"></many-to-one>
 	</joined-subclass>
 </hibernate-mapping>

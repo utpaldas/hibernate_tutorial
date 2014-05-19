@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.DetachedCriteria;
-import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.criterion.Subqueries;
@@ -107,9 +107,9 @@ public class CriteriaQueryTest {
 			}
 			customer.deleteRecord();
 		}
-		
+
 	}
-	
+
 	@Test
 	public void testCriteriaQueryCountonEntity() {
 		customer.insertRecord();
@@ -120,7 +120,7 @@ public class CriteriaQueryTest {
 			Criteria criteria = session.createCriteria(Order.class);
 			criteria.add(Restrictions.eq("customer", cust));
 			criteria.setProjection(Projections.rowCount());
-			long rowCnt = (Long)criteria.uniqueResult();
+			long rowCnt = (Long) criteria.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -131,7 +131,28 @@ public class CriteriaQueryTest {
 			customer.deleteRecord();
 		}
 	}
-	
+
+	@Test
+	public void testCriteriaQueryCountUsingHQLonEntity() {
+		customer.insertRecord();
+		Customer cust = customer.getCustomerById();
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			session.beginTransaction();
+			Query query = session
+					.createQuery("select count(*) from Customer c where c.id=1");
+			long rowCnt = query.list().size();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+			customer.deleteRecord();
+		}
+	}
+
 	@Test
 	public void testCriteriaQueryCountonEntityName() {
 		customer.insertRecord();
@@ -140,9 +161,9 @@ public class CriteriaQueryTest {
 		try {
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria("CustomOrderEntity");
-			criteria.add(Restrictions.eq("customer", cust));
+			criteria.add(Restrictions.ne("customer", null));
 			criteria.setProjection(Projections.rowCount());
-			long rowCnt = (Long)criteria.uniqueResult();
+			long rowCnt = (Long) criteria.uniqueResult();
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -153,7 +174,7 @@ public class CriteriaQueryTest {
 			customer.deleteRecord();
 		}
 	}
-	
+
 	@Test
 	public void testGetEntityName() {
 		customer.insertRecord();
@@ -161,7 +182,7 @@ public class CriteriaQueryTest {
 		Session session = sessionFactory.getCurrentSession();
 		try {
 			session.beginTransaction();
-			Order ord = (Order)session.get("CustomOrderEntity", new Long(1));
+			Order ord = (Order) session.get("CustomOrderEntity", new Long(1));
 			session.getTransaction().commit();
 		} catch (Exception e) {
 			e.printStackTrace();

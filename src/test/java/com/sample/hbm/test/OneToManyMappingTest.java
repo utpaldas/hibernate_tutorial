@@ -112,6 +112,7 @@ public class OneToManyMappingTest implements CRUD {
 
 	@Test
 	public void updateRecord() {
+		insertRecord();
 		Order ord = this.getOrderById();
 		Session session = null;
 		try {
@@ -126,7 +127,7 @@ public class OneToManyMappingTest implements CRUD {
 			}
 			ord.setLineItems(lineItems);
 			session.update(ord);
-			//session.getTransaction().commit();
+			session.getTransaction().commit();
 		} catch (Exception ex) {
 			logger.error(this.getClass().getCanonicalName() + ": updateRecord"
 					+ ex.getLocalizedMessage());

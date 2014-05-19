@@ -12,7 +12,7 @@
 			using an outer join when querying Person -->
 		<join table="EMPLOYEE" fetch="select">
 			<key column="EMPLOYEE_ID" />
-			<property name="role" column="ROLE" access="com.sample.hbm.accessor.CustomRoleAccessor">
+			<property name="role" column="ROLE">
 				<type name="org.hibernate.type.EnumType">
 					<param name="enumClass">com.sample.model.EmployeeTypeEnum</param>
 					<!-- type determines what value gets stored in DB column. In this case 
