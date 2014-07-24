@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.sample</groupId>
 	<artifactId>hibernate_tutorial</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<name>hibernate_tutorial</name>
 	<description>This project is to illustrate the basic concepts of hibernate. </description>
 	<dependencies>
