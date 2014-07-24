@@ -29,12 +29,14 @@ public class PersistenceServiceImpl {
 		logger = HibernateUtil.getLogger();
 	}
 
-	public void createInstance(Object obj) throws Exception {
+	public Object createInstance(Object obj) throws Exception {
+		Object output = null;
 		Session session = sessionFactory.getCurrentSession();
 		try {
 			session.beginTransaction();
 			session.save(obj);
 			session.getTransaction().commit();
+			output = obj;
 		} catch (Exception e) {
 			logger.error("Exception saving object of type: "
 					+ obj.getClass().getCanonicalName());
@@ -43,6 +45,7 @@ public class PersistenceServiceImpl {
 				session.close();
 			}
 		}
+		return output;
 	}
 
 	public Object getInstance(Class<?> entityName, long id) throws Exception {

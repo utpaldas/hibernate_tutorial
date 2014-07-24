@@ -21,7 +21,8 @@ public class PersistenceServiceImplTest {
 		cust.setFirstName("John");
 		cust.setLastName("Doe");
 		try {
-			persistenceServiceImpl.createInstance(cust);
+			cust = (Customer) persistenceServiceImpl.createInstance(cust);
+			System.out.println("Customer created with Id: " + cust.getId());
 		} catch (Exception e) {
 			Assert.fail("Creation failed");
 		}
@@ -32,7 +33,7 @@ public class PersistenceServiceImplTest {
 		try {
 			Object obj = persistenceServiceImpl.getInstance(Customer.class, 1);
 			if (obj != null && obj instanceof Customer) {
-				Customer cust = (Customer)obj;
+				Customer cust = (Customer) obj;
 				System.out.println(cust.getFirstName());
 			}
 		} catch (Exception e) {
