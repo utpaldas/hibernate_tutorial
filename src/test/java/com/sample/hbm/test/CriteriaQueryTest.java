@@ -1,6 +1,8 @@
 package com.sample.hbm.test;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
@@ -191,6 +193,32 @@ public class CriteriaQueryTest {
 				session.close();
 			}
 			customer.deleteRecord();
+		}
+	}
+
+	/*
+	 * Sample query to get the list of orders with certain lineItems.
+	 */
+	@Test
+	public void testListQuery() {
+		order.insertRecord();
+		Order ord = order.getOrderById();
+		LineItem lt = ord.getLineItems().iterator().next();
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Order.class);
+			criteria.createAlias("lineItems", "item");
+			criteria.add(Restrictions.eq("item.id", lt.getId()));
+			List<Order> ordList = criteria.list();
+			System.out.println("Done");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			if (session != null && session.isOpen()) {
+				session.close();
+			}
+			order.deleteRecord();
 		}
 	}
 

@@ -117,7 +117,10 @@ public class ManyToOneMappingTest implements CRUD {
 
 			ord.setLineItems(lineItems);
 
-			ord.setCustomer(customer);
+			List<Customer> list = new ArrayList<Customer>();
+			list.add(customer);
+			ord.setCustomer(list);
+			//ord.setCustomer(customer);
 
 			session.save("BaseOrder", ord);
 			session.getTransaction().commit();
@@ -159,9 +162,9 @@ public class ManyToOneMappingTest implements CRUD {
 			lineItems.add(l2);
 
 			ord.setLineItems(lineItems);
-
-			ord.setCustomer(customer);
-
+			List<Customer> list = new ArrayList<Customer>();
+			list.add(customer);
+			ord.setCustomer(list);
 			session.save(ord);
 			session.getTransaction().commit();
 		} catch (Exception ex) {
